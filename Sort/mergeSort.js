@@ -35,5 +35,3 @@ const merge = (left, right) => {
 console.time("merge-sort");
 console.log(mergeSort(source));
 console.timeEnd("merge-sort");
-
-module.exports = mergeSort;

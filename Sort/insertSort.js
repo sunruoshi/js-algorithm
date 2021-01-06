@@ -22,5 +22,3 @@ const insertSort = arr => {
 console.time("insert-sort");
 console.log(insertSort(source));
 console.timeEnd("insert-sort");
-
-module.exports = insertSort;

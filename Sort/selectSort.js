@@ -19,5 +19,3 @@ const selectSort = arr => {
 console.time("select-sort");
 console.log(selectSort(source));
 console.timeEnd("select-sort");
-
-module.exports = selectSort;

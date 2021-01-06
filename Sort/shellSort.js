@@ -27,5 +27,3 @@ const shellSort = arr => {
 console.time("shell-sort");
 console.log(shellSort(source));
 console.timeEnd("shell-sort");
-
-module.exports = shellSort;

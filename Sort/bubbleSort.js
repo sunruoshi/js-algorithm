@@ -19,5 +19,3 @@ const bubbleSort = arr => {
 console.time("bubble-sort");
 console.log(bubbleSort(source));
 console.timeEnd("bubble-sort");
-
-module.exports = bubbleSort;
