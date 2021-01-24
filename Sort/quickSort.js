@@ -25,16 +25,11 @@ const quickSort2 = (arr, left, right) => {
   if (left < right) {
     let index = left + 1;
     for (var i = index; i <= right; i++) {
-      /*
-       * 从left + 1开始, 小于left的，将其放到index的位置，index右移一位
-       * 循环结束时，left+1 到 index-1 都将小于 arr[left]
-       */
       if (arr[i] < arr[left]) {
         [arr[i], arr[index]] = [arr[index], arr[i]];
         index++;
       }
     }
-    // 交换 left 和 index-1, 这样index-1左边均小于arr[index-1]
     [arr[left], arr[index - 1]] = [arr[index - 1], arr[left]];
     quickSort2(arr, left, index - 2);
     quickSort2(arr, index, right);
