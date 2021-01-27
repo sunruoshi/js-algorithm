@@ -1,86 +1,65 @@
-function sudokuSolver(matrix) {
-  if (solveSudoku(matrix) === true) {
-    return matrix;
-  }
-  return "NO ANSWER";
-}
-
-const UNASSIGNED = 0;
-
-function solveSudoku(matrix) {
-  let row = 0;
-  let col = 0;
-  let checkBlankSpaces = false;
-  for (row = 0; row < matrix.length; row++) {
-    for (col = 0; col < matrix[row].length; col++) {
-      if (matrix[row][col] === UNASSIGNED) {
-        checkBlankSpaces = true;
-        break;
-      }
-    }
-  }
-  if (checkBlankSpaces === false) {
-    return true;
-  }
-  for (let num = 1; num <= 9; num++) {
-    if (isSafe(matrix, row, col, num)) {
-      matrix[row][col] = num;
-      if (solveSudoku(matrix)) {
-        return true;
-      }
-      matrix[row][col] = UNASSIGNED;
-    }
-  }
-  return false;
-}
-
-function isSafe(matrix, row, col, num) {
-  return (
-    !usedInRow(matrix, row, num) &&
-    !usedInCol(matrix, col, num) &&
-    !usedInBox(matrix, row - (row % 3), col - (col % 3), num)
-  );
-}
-
-function usedInRow(matrix, row, num) {
-  for (let col = 0; col < matrix.length; col++) {
-    if (matrix[row][col] === num) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function usedInCol(matrix, col, num) {
-  for (let row = 0; row < matrix.length; row++) {
-    if (matrix[row][col] === num) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function usedInBox(matrix, boxStartRow, boxStartCol, num) {
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 3; col++) {
-      if (matrix[row + boxStartRow][col + boxStartCol] === num) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-const sudokuGrid = [
-  [5, 3, 0, 0, 7, 0, 0, 0, 0],
-  [6, 0, 0, 1, 9, 5, 0, 0, 0],
-  [0, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
-  [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
-  [0, 6, 0, 0, 0, 0, 2, 8, 0],
-  [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9]
+let sudoku = [
+  ["5", "3", ".", ".", "7", ".", ".", ".", "."],
+  ["6", ".", ".", "1", "9", "5", ".", ".", "."],
+  [".", "9", "8", ".", ".", ".", ".", "6", "."],
+  ["8", ".", ".", ".", "6", ".", ".", ".", "3"],
+  ["4", ".", ".", "8", ".", "3", ".", ".", "1"],
+  ["7", ".", ".", ".", "2", ".", ".", ".", "6"],
+  [".", "6", ".", ".", ".", ".", "2", "8", "."],
+  [".", ".", ".", "4", "1", "9", ".", ".", "5"],
+  [".", ".", ".", ".", "8", ".", ".", "7", "9"]
 ];
 
-console.log(sudokuSolver(sudokuGrid));
+let line = new Array(9).fill(0).map(() => new Array(9).fill(false));
+let column = new Array(9).fill(0).map(() => new Array(9).fill(false));
+let block = new Array(3)
+  .fill(0)
+  .map(() => new Array(3).fill(0).map(() => new Array(9).fill(false)));
+let valid = false;
+let spaces = [];
+
+const solveSudoku = board => {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (board[i][j] === ".") {
+        spaces.push([i, j]);
+      } else {
+        let digit = parseInt(board[i][j]) - 1;
+        line[i][digit] = true;
+        column[j][digit] = true;
+        block[Math.floor(i / 3)][Math.floor(j / 3)][digit] = true;
+      }
+    }
+  }
+  dfs(board, 0);
+};
+
+const dfs = (board, pos) => {
+  if (pos === spaces.length) {
+    valid = true;
+    return;
+  }
+  let space = spaces[pos];
+  let i = space[0];
+  let j = space[1];
+  for (let digit = 0; digit < 9 && !valid; digit++) {
+    if (
+      !line[i][digit] &&
+      !column[j][digit] &&
+      !block[Math.floor(i / 3)][Math.floor(j / 3)][digit]
+    ) {
+      line[i][digit] = true;
+      column[j][digit] = true;
+      block[Math.floor(i / 3)][Math.floor(j / 3)][digit] = true;
+      board[i][j] = (digit + 1).toString();
+      dfs(board, pos + 1);
+      line[i][digit] = false;
+      column[j][digit] = false;
+      block[Math.floor(i / 3)][Math.floor(j / 3)][digit] = false;
+    }
+  }
+};
+
+solveSudoku(sudoku);
+
+console.log(sudoku);
