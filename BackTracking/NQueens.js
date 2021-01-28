@@ -9,7 +9,7 @@ function solveNQueens(n) {
     for (let i = 0; i < n; i++) {
       let newRow = new Array(n).fill(".");
       newRow[queen[i]] = "Q";
-      board.push(newRow.join(""));
+      board.push(newRow);
     }
     return board;
   };
